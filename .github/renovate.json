@@ -1,0 +1,35 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["/eslint/"],
+      "labels": ["linting"]
+    },
+    {
+      "matchDepTypes": ["optionalDependencies"],
+      "addLabels": ["optional"]
+    },
+    {
+      "description": "Automerge minor and patch updates for devDependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Group all minor and patch deps into a single PR per run",
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all-minor-patch-updates"
+    }
+  ],
+  "npm": {
+    "minimumReleaseAge": "7 days"
+  },
+  "schedule": [
+    "after 6am and before 6pm on every weekday"
+  ],
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 5
+}
