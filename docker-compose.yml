@@ -1,0 +1,11 @@
+services:
+  reviews-app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - ./src/db:/app/src/db
+      - ./src/public/uploads:/app/src/public/uploads
+    environment:
+      - NODE_ENV=production
