@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Review</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Review</h1>
+    <form action="/update/<%= review.id %>" method="POST">
+      <input type="text" name="username" value="<%= review.username %>" required>
+      <textarea name="review" required><%= review.review %></textarea>
+      <select name="rating" required>
+        <option value="">Select Rating</option>
+        <option value="1" <%= review.rating == 1 ? 'selected' : '' %>>1 Star</option>
+        <option value="2" <%= review.rating == 2 ? 'selected' : '' %>>2 Stars</option>
+        <option value="3" <%= review.rating == 3 ? 'selected' : '' %>>3 Stars</option>
+        <option value="4" <%= review.rating == 4 ? 'selected' : '' %>>4 Stars</option>
+        <option value="5" <%= review.rating == 5 ? 'selected' : '' %>>5 Stars</option>
+      </select>
+      <button type="submit">Update Review</button>
+    </form>
+    <a href="/">Cancel</a>
+  </div>
+</body>
+</html>

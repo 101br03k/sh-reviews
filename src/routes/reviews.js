@@ -52,6 +52,35 @@ router.post("/submit", upload.single("image"), (req, res) => {
   );
 });
 
+// GET edit form for a review
+router.get("/edit/:id", (req, res) => {
+  const id = req.params.id;
+  db.get("SELECT * FROM reviews WHERE id = ?", [id], (err, review) => {
+    if (err || !review) {
+      return res.redirect("/");
+    }
+    res.render("edit", { review });
+  });
+});
+
+// POST updated review
+router.post("/update/:id", (req, res) => {
+  const id = req.params.id;
+  const { username, review, rating } = req.body;
+
+  db.run(
+    "UPDATE reviews SET username = ?, review = ?, rating = ? WHERE id = ?",
+    [username, review, rating, id],
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.redirect("/");
+      }
+      res.redirect("/");
+    },
+  );
+});
+
 // DELETE a review
 router.post("/delete/:id", (req, res) => {
   const id = req.params.id;

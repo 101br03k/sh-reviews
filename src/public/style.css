@@ -47,6 +47,11 @@ button:hover {
   background: #0056b3;
 }
 
+.delete {
+  padding: 0.3em 1.5em;
+  float: right;
+}
+
 .review {
   border-bottom: 1px solid #eee;
   padding: 1em 0;
