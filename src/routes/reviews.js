@@ -33,6 +33,11 @@ router.get("/", (req, res) => {
   });
 });
 
+// GET submission page
+router.get("/submit", (req, res) => {
+  res.render("submit");
+});
+
 // POST a new review with image
 router.post("/submit", upload.single("image"), (req, res) => {
   const { username, review, rating } = req.body; // Get rating from body

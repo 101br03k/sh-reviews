@@ -18,20 +18,11 @@
     <% if (error) { %>
       <div style="color: red;"><%= error %></div>
     <% } %>
-    <form action="/submit" method="POST" enctype="multipart/form-data">
-      <input type="text" name="username" placeholder="Product / Item Name" required>
-      <textarea name="review" placeholder="Your Review" required></textarea>
-      <input type="file" name="image" accept="image/*">
-      <select name="rating" required>
-        <option value="">Select Rating</option>
-        <option value="1">1 Star</option>
-        <option value="2">2 Stars</option>
-        <option value="3">3 Stars</option>
-        <option value="4">4 Stars</option>
-        <option value="5">5 Stars</option>
-      </select>
-      <button type="submit">Submit Review</button>
-    </form>
+    <div style="text-align: center; margin-bottom: 2em;">
+      <a href="/submit" style="text-decoration: none;">
+        <button type="button">Add New Review</button>
+      </a>
+    </div>
               <!-- In src/views/index.ejs -->
               <% reviews.forEach(review => { %>
                 <div class="review">

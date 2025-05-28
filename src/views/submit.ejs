@@ -1,25 +1,28 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Review</title>
+  <title>Submit Review</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1>Submit Your Review</h1>
-    <form action="/reviews" method="POST">
-        <div>
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div>
-            <label for="review">Your Review:</label>
-            <textarea id="review" name="review" required></textarea>
-        </div>
-        <div>
-            <button type="submit">Submit Review</button>
-        </div>
+  <div class="container">
+    <h1>Submit a Review</h1>
+    <form action="/submit" method="POST" enctype="multipart/form-data">
+      <input type="text" name="username" placeholder="Product / Item Name" required>
+      <textarea name="review" placeholder="Your Review" required></textarea>
+      <input type="file" name="image" accept="image/*">
+      <select name="rating" required>
+        <option value="">Select Rating</option>
+        <option value="1">1 Star</option>
+        <option value="2">2 Stars</option>
+        <option value="3">3 Stars</option>
+        <option value="4">4 Stars</option>
+        <option value="5">5 Stars</option>
+      </select>
+      <button type="submit">Submit Review</button>
     </form>
     <a href="/">Back to Reviews</a>
+  </div>
 </body>
 </html>
