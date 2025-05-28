@@ -1,11 +1,11 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const reviewsRouter = require('./routes/reviews');
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const reviewsRouter = require("./routes/reviews");
 
 // Add SQLite3 and ensure reviews table exists
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(path.join(__dirname, 'db', 'database.sqlite'));
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database(path.join(__dirname, "db", "database.sqlite"));
 
 // Create the reviews table if it doesn't exist
 db.run(`
@@ -14,6 +14,7 @@ db.run(`
     username TEXT NOT NULL,
     review TEXT NOT NULL,
     image TEXT,
+    rating INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `);
@@ -21,14 +22,14 @@ db.run(`
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/', reviewsRouter);
+app.use("/", reviewsRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

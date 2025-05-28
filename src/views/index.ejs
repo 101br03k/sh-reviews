@@ -19,28 +19,42 @@
       <div style="color: red;"><%= error %></div>
     <% } %>
     <form action="/submit" method="POST" enctype="multipart/form-data">
-      <input type="text" name="username" placeholder="Your name" required>
-      <textarea name="review" placeholder="Your review" required></textarea>
+      <input type="text" name="username" placeholder="Product / Item Name" required>
+      <textarea name="review" placeholder="Your Review" required></textarea>
       <input type="file" name="image" accept="image/*">
+      <select name="rating" required>
+        <option value="">Select Rating</option>
+        <option value="1">1 Star</option>
+        <option value="2">2 Stars</option>
+        <option value="3">3 Stars</option>
+        <option value="4">4 Stars</option>
+        <option value="5">5 Stars</option>
+      </select>
       <button type="submit">Submit Review</button>
     </form>
-    <% reviews.forEach(function(review) { %>
-      <div class="review">
-  <div class="review-header">
-    <div class="username"><%= review.username %></div>
-    <div class="date"><%= new Date(review.created_at).toLocaleString() %></div>
-  </div>
-  <div class="review-content">
-    <% if (review.image) { %>
-      <img src="<%= review.image %>" alt="Review image">
-        <% } %>
-                <div class="text"><%= review.review %></div>
-            </div>
-            <form action="/delete/<%= review.id %>" method="POST" style="display:inline;" onsubmit="return confirmDelete(this);">
-                <button type="submit" class="delete-btn">Delete</button>
-            </form>
+      <% reviews.forEach(review => { %>
+        <div class="review">
+          <div class="review-header">
+              <span class="username"><%= review.username %></span>
+              <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
+          </div>
+          <div class="review-content">
+            <div class="text"><%= review.review %></div>
+            <% if (review.image) { %>
+              <img src="<%= review.image %>" alt="Review Image">
+            <% } %>
+          </div>
+          <div class="rating">
+            Rating: 
+            <% for (let i = 0; i < review.rating; i++) { %>
+              <span class="star">★</span>
+            <% } %>
+            <% for (let i = review.rating; i < 5; i++) { %>
+              <span class="star">☆</span>
+            <% } %>
+          </div> <!-- Display rating as stars -->
         </div>
-    <% }) %>
+      <% }) %>
   </div>
 </body>
 </html>

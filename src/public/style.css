@@ -11,7 +11,7 @@ body {
   background: #fff;
   padding: 2em;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -23,7 +23,8 @@ form {
   margin-bottom: 2em;
 }
 
-input[type="text"], textarea {
+input[type="text"],
+textarea {
   width: 100%;
   padding: 0.7em;
   margin-bottom: 1em;
@@ -80,7 +81,7 @@ button:hover {
   display: block;
   margin-top: 0;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   max-width: 120px;
   max-height: 120px;
 }
@@ -88,4 +89,13 @@ button:hover {
 .review .text {
   flex: 1;
   word-break: break-word;
+}
+
+.star {
+  color: gold;
+  /* Change color to gold for filled stars */
+  font-size: 1.2em;
+  /* Adjust size if needed */
+  margin-right: 2px;
+  /* Space between stars */
 }
