@@ -25,7 +25,7 @@
     }
   ],
   "npm": {
-    "minimumReleaseAge": "7 days"
+    "minimumReleaseAge": "30 days"
   },
   "schedule": [
     "after 6am and before 6pm on every weekday"
