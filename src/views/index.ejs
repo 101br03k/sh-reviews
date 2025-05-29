@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Reviews</title>
+  <title>SH-Reviews</title>
   <link rel="stylesheet" href="/style.css">
   <script>
     function confirmDelete(form) {
@@ -11,10 +11,14 @@
       return false;
     }
   </script>
+  <link rel="icon" type="image/x-icon" href="/SH-Reviews-logo/icon.png">
+  <link rel="apple-touch-icon" href="/SH-Reviews-logo/icon.png">
 </head>
 <body>
   <div class="container">
-    <h1>Reviews</h1>
+    <div class="header">
+      <img alt="SH-Reviews Logo" class="logo" src="/SH-Reviews-logo/vector/default.svg">
+    </div>
     <% if (error) { %>
       <div style="color: red;"><%= error %></div>
     <% } %>
@@ -23,34 +27,38 @@
         <button type="button">Add New Review</button>
       </a>
     </div>
-              <!-- In src/views/index.ejs -->
-              <% reviews.forEach(review => { %>
-                <div class="review">
-                  <div class="review-header">
-                    <span class="username"><%= review.username %></span>
-                    <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
-                    &nbsp <a href="/edit/<%= review.id %>">Edit</a> <!-- Edit link -->
-                    
-                  </div>
-                  <div class="review-content">
-                    <div class="text"><%= review.review %></div>
-                    <% if (review.image) { %>
-                      <img src="<%= review.image %>" alt="Review Image">
-                    <% } %>
-                  </div>
-                  <div class="rating">Rating: 
-                    <% for (let i = 0; i < review.rating; i++) { %>
-                      <span class="star">★</span>
-                    <% } %>
-                    <% for (let i = review.rating; i < 5; i++) { %>
-                      <span class="star">☆</span>
-                    <% } %>
-                    <form action="/delete/<%= review.id %>" method="POST" style="display:inline;">
-                      <button class="delete" type="submit" onclick="return confirm('Are you sure you want to delete this review?');">Delete</button>
-                    </form>
-                  </div>
-                </div>
-              <% }) %>
+    <!-- In src/views/index.ejs -->
+    <% reviews.forEach(review => { %>
+      <div class="review">
+        <div class="review-header">
+          <span class="username"><%= review.username %></span>
+          <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
+          &nbsp <a href="/edit/<%= review.id %>">Edit</a> <!-- Edit link -->
+          
+        </div>
+        <div class="review-content">
+          <div class="text"><%= review.review %></div>
+          <% if (review.image) { %>
+            <img src="<%= review.image %>" alt="Review Image">
+          <% } %>
+        </div>
+        <div class="rating">Rating: 
+          <% for (let i = 0; i < review.rating; i++) { %>
+            <span class="star">★</span>
+          <% } %>
+          <% for (let i = review.rating; i < 5; i++) { %>
+            <span class="star">☆</span>
+          <% } %>
+          <form action="/delete/<%= review.id %>" method="POST" style="display:inline;">
+            <button class="delete" type="submit" onclick="return confirm('Are you sure you want to delete this review?');">Delete</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
   </div>
+  <footer>
+    source: <a href="https://github.com/101br03k/sh-reviews">github.com/101br03k/sh-reviews</a> | Made with <a href="idk">some program</a>.<br>
+    Under some licence: <a href="#">that I will proberly never decide on.</a>
+  </footer>
 </body>
 </html>

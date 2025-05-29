@@ -1,8 +1,15 @@
+html,
 body {
+  height: 100%;
   font-family: Arial, sans-serif;
   background: #f7f7f7;
   margin: 0;
   padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -14,9 +21,32 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.logo {
+  margin-right: 1em;
+  height: 100px;
+  width: auto;
+}
+
 h1 {
-  text-align: center;
   color: #333;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+img {
+  width: 24.3vw;
+  height: 10vh;
 }
 
 form {
@@ -103,4 +133,11 @@ button:hover {
   /* Adjust size if needed */
   margin-right: 2px;
   /* Space between stars */
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #f7f7f7;
+  margin-top: auto;
 }
