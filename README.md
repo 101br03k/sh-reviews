@@ -4,7 +4,7 @@ A simple and elegant web application that allows users to submit and view review
 
 ## Features
 
-- Submit reviews with username, text content, and star ratings (1-5 stars)
+- Submit reviews, text content, and star ratings (1-5 stars)
 - Upload images with reviews
 - View all reviews in chronological order (newest first)
 - Edit existing reviews
@@ -64,7 +64,7 @@ The application uses SQLite with the following table structure:
 ```sql
 CREATE TABLE reviews (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL,
+  title TEXT NOT NULL,
   review TEXT NOT NULL,
   image TEXT,
   rating INTEGER,

@@ -11,7 +11,7 @@ const db = new sqlite3.Database(path.join(__dirname, "db", "database.sqlite"));
 db.run(`
   CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
+    title TEXT NOT NULL,
     review TEXT NOT NULL,
     image TEXT,
     rating INTEGER,

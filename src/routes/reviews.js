@@ -40,13 +40,13 @@ router.get("/submit", (req, res) => {
 
 // POST a new review with image
 router.post("/submit", upload.single("image"), (req, res) => {
-  const { username, review, rating } = req.body; // Get rating from body
+  const { title, review, rating } = req.body; // Get rating from body
   const image = req.file ? "/uploads/" + req.file.filename : null;
-  if (!username || !review || !rating) return res.redirect("/");
+  if (!title || !review || !rating) return res.redirect("/");
 
   db.run(
-    "INSERT INTO reviews (username, review, image, rating) VALUES (?, ?, ?, ?)",
-    [username, review, image, rating],
+    "INSERT INTO reviews (title, review, image, rating) VALUES (?, ?, ?, ?)",
+    [title, review, image, rating],
     function (err) {
       if (err) {
         console.error(err);
@@ -71,11 +71,11 @@ router.get("/edit/:id", (req, res) => {
 // POST updated review
 router.post("/update/:id", (req, res) => {
   const id = req.params.id;
-  const { username, review, rating } = req.body;
+  const { title, review, rating } = req.body;
 
   db.run(
-    "UPDATE reviews SET username = ?, review = ?, rating = ? WHERE id = ?",
-    [username, review, rating, id],
+    "UPDATE reviews SET title = ?, review = ?, rating = ? WHERE id = ?",
+    [title, review, rating, id],
     (err) => {
       if (err) {
         console.error(err);
