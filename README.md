@@ -86,4 +86,4 @@ Feel free to submit issues or pull requests if you have suggestions or improveme
 
 ## License
 
-ISC
+GPL-3.0 license, which can be found in full detail in the LICENCE file. 
