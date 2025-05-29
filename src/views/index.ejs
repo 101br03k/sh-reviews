@@ -31,7 +31,7 @@
     <% reviews.forEach(review => { %>
       <div class="review">
         <div class="review-header">
-          <span class="username"><%= review.username %></span>
+          <span class="titleclass"><%= review.title %></span>
           <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
           &nbsp <a href="/edit/<%= review.id %>">Edit</a> <!-- Edit link -->
           
