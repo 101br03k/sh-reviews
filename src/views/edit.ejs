@@ -11,7 +11,10 @@
     <h1>Edit Review</h1>
     <form action="/update/<%= review.id %>" method="POST">
       <input type="text" name="title" value="<%= review.title %>" required>
-      <textarea name="review" required><%= review.review %></textarea>
+      <textarea name="review" required><%= review.review %></textarea><br>
+      <% if (review.image) { %>
+        <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>" style="max-width: 20%; max-height: 20;">
+      <% } %><br><br>
       <select name="rating" required>
         <option value="">Select Rating</option>
         <option value="1" <%= review.rating == 1 ? 'selected' : '' %>>1 Star</option>
@@ -21,8 +24,11 @@
         <option value="5" <%= review.rating == 5 ? 'selected' : '' %>>5 Stars</option>
       </select>
       <button type="submit">Update Review</button>
+      <button type="submit" action="/">Cancel Edit</button>
+      <form action="/delete/<%= review.id %>" method="POST" style="display:inline;">
+        <button class="delete" type="submit" onclick="return confirm('Are you sure you want to delete this review?');">Delete</button>
+      </form>
     </form>
-    <a href="/">Cancel</a>
   </div>
 </body>
 </html>
