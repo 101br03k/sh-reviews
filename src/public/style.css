@@ -13,9 +13,9 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 85%;
   margin: 40px auto;
-  background: #fff;
+  background: #fefefe;
   padding: 2em;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -44,9 +44,10 @@ a {
   color: #007bff;
 }
 
-img {
+.logo {
   width: 24.3vw;
   height: 10vh;
+  padding: 0;
 }
 
 form {
@@ -71,15 +72,22 @@ button {
   border-radius: 4px;
   font-size: 1em;
   cursor: pointer;
+  transition-duration: 0.3s;
 }
 
 button:hover {
   background: #0056b3;
 }
 
+.edit {
+  padding: 0.3em 1.5em;
+  float: right;
+}
+
 .delete {
   padding: 0.3em 1.5em;
   float: right;
+  margin-left: 0.5em;
 }
 
 .review {
@@ -110,6 +118,7 @@ button:hover {
   display: flex;
   align-items: flex-start;
   gap: 1em;
+  min-height: 120px;
 }
 
 .review img {
@@ -117,14 +126,19 @@ button:hover {
   margin-top: 0;
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  height: inherit;
   max-width: 120px;
-  max-height: 120px;
+  max-height: 100%;
   object-fit: cover;
 }
 
 .review .text {
   flex: 1;
   word-break: break-word;
+}
+
+.rating {
+  margin-top: 1.5em;
 }
 
 .star {
