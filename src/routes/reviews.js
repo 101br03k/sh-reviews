@@ -4,10 +4,12 @@ const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
+const markdownIt = require("markdown-it");
 
 const db = new sqlite3.Database(
   path.join(__dirname, "..", "db", "database.sqlite"),
 );
+const md = markdownIt();
 
 // Set up multer for image uploads
 const uploadDir = path.join(__dirname, "..", "public", "uploads");
@@ -29,7 +31,13 @@ router.get("/", (req, res) => {
         error: "Error retrieving reviews",
       });
     }
-    res.render("index", { reviews: rows, error: null });
+    // Render markdown for title and review fields
+    const reviews = rows.map(r => ({
+      ...r,
+      title_html: md.renderInline(r.title),
+      review_html: md.render(r.review)
+    }));
+    res.render("index", { reviews, error: null });
   });
 });
 
@@ -64,6 +72,9 @@ router.get("/edit/:id", (req, res) => {
     if (err || !review) {
       return res.redirect("/");
     }
+    // Render markdown for title and review fields
+    review.title_html = md.renderInline(review.title);
+    review.review_html = md.render(review.review);
     res.render("edit", { review });
   });
 });
