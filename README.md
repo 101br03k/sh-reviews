@@ -34,7 +34,6 @@ review-website/
 │       ├── uploads/             # Directory for uploaded images
 │       └── SH-Reviews-logo/     # Logo assets
 ├── package.json                 # Dependencies and scripts
-├── .replit                      # Replit configuration
 └── README.md                    # This file
 ```
 
