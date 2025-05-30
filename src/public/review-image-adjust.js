@@ -27,5 +27,41 @@ window.addEventListener('DOMContentLoaded', function () {
     } else {
       img.addEventListener('load', adjustImage);
     }
+
+    // Add popup on click
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', function () {
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(0,0,0,0.8)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = 9999;
+      overlay.style.cursor = 'zoom-out';
+
+      // Create big image
+      const bigImg = document.createElement('img');
+      bigImg.src = img.src;
+      bigImg.alt = img.alt;
+      bigImg.style.maxWidth = '90vw';
+      bigImg.style.maxHeight = '90vh';
+      bigImg.style.borderRadius = '8px';
+      bigImg.style.boxShadow = '0 4px 32px rgba(0,0,0,0.5)';
+      bigImg.style.background = '#fff';
+      bigImg.style.objectFit = 'contain';
+      overlay.appendChild(bigImg);
+
+      // Remove overlay on click
+      overlay.addEventListener('click', function () {
+        overlay.remove();
+      });
+      document.body.appendChild(overlay);
+    });
   });
 });
