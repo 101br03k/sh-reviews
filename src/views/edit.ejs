@@ -14,8 +14,9 @@
       <textarea name="review" required><%= review.review %></textarea><br>
       <div>
         <label>Current Image:</label><br>
-        <img src="<%= review.image %>" alt="Current Image" style="max-width: 100%;">
+        <img id="current-image" src="<%= review.image %>" alt="Current Image" style="max-width: 100%;">
       </div>
+      Select Rating:
       <select name="rating" required>
         <option value="">Select Rating</option>
         <option value="1" <%= review.rating == 1 ? 'selected' : '' %>>1 Star</option>
@@ -23,11 +24,11 @@
         <option value="3" <%= review.rating == 3 ? 'selected' : '' %>>3 Stars</option>
         <option value="4" <%= review.rating == 4 ? 'selected' : '' %>>4 Stars</option>
         <option value="5" <%= review.rating == 5 ? 'selected' : '' %>>5 Stars</option>
-      </select>
+      </select><br><br>
       <div>
         <label for="image">Change Image:</label>
-        <input type="file" id="ïmage" name="image" accept="image/*">
-      </div>
+        <input type="file" id="image" name="image" accept="image/*">
+      </div><br>
       <button type="submit">Update Review</button>
       <a href="/" class="button">Cancel Edit</a>
       <form action="/delete/<%= review.id %>" method="POST" style="display:inline;">
@@ -35,5 +36,14 @@
       </form>
     </form>
   </div>
+  <script>
+  document.getElementById('image').addEventListener('change', function(event) {
+    const [file] = event.target.files;
+    if (file) {
+      const img = document.getElementById('current-image');
+      img.src = URL.createObjectURL(file);
+    }
+  });
+</script>
 </body>
 </html>

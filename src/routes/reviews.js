@@ -69,21 +69,39 @@ router.get("/edit/:id", (req, res) => {
 });
 
 // POST updated review
-router.post("/update/:id", (req, res) => {
+router.post("/update/:id", upload.single("image"), (req, res) => {
   const id = req.params.id;
   const { title, review, rating } = req.body;
 
-  db.run(
-    "UPDATE reviews SET title = ?, review = ?, rating = ? WHERE id = ?",
-    [title, review, rating, id],
-    (err) => {
-      if (err) {
-        console.error(err);
-        return res.redirect("/");
+  // Get the old image path first
+  db.get("SELECT image FROM reviews WHERE id = ?", [id], (err, row) => {
+    if (err || !row) {
+      console.error(err);
+      return res.redirect("/");
+    }
+
+    let imagePath = row.image;
+    if (req.file) {
+      // Delete old image if it exists
+      if (imagePath) {
+        const oldImgPath = path.join(__dirname, "..", "public", imagePath);
+        fs.unlink(oldImgPath, () => {});
       }
-      res.redirect("/");
-    },
-  );
+      imagePath = "/uploads/" + req.file.filename;
+    }
+
+    db.run(
+      "UPDATE reviews SET title = ?, review = ?, image = ?, rating = ? WHERE id = ?",
+      [title, review, imagePath, rating, id],
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.redirect("/");
+        }
+        res.redirect("/");
+      }
+    );
+  });
 });
 
 // DELETE a review

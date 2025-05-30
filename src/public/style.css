@@ -50,6 +50,7 @@ textarea {
 
 .delete {
   background-color: #ff0000;
+  float: right;
 }
 
 .delete:hover {
