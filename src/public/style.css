@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-  max-width: 85%;
+  max-width: 60vw;
   margin: 40px auto;
   background: #fefefe;
   padding: 2em;
@@ -29,24 +29,8 @@ body {
 }
 
 .logo {
-  margin-right: 1em;
-  height: 100px;
   width: auto;
-}
-
-h1 {
-  color: #333;
-  margin: 0;
-}
-
-a {
-  text-decoration: none;
-  color: #007bff;
-}
-
-.logo {
-  width: 24.3vw;
-  height: 10vh;
+  height: 12.5vh;
   padding: 0;
 }
 
@@ -64,6 +48,15 @@ textarea {
   font-size: 1em;
 }
 
+.delete {
+  background-color: #ff0000;
+  float: right;
+}
+
+.delete:hover {
+  background-color: #a80000;
+}
+
 button {
   background: #007bff;
   color: #fff;
@@ -77,17 +70,28 @@ button {
 
 button:hover {
   background: #0056b3;
+  padding: 0.7em 1.5em;
+}
+
+.button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.7em 1.5em;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: #0056b3;
+  padding: 0.7em 1.5em;
 }
 
 .edit {
-  padding: 0.3em 1.5em;
   float: right;
-}
-
-.delete {
-  padding: 0.3em 1.5em;
-  float: right;
-  margin-left: 0.5em;
 }
 
 .review {
@@ -107,18 +111,18 @@ button:hover {
   font-weight: bold;
   color: #007bff;
   margin-right: 1em;
+  font-size: 1.25em;
 }
 
 .review .date {
   color: #888;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 .review-content {
   display: flex;
   align-items: flex-start;
   gap: 1em;
-  min-height: 120px;
 }
 
 .review img {
@@ -126,9 +130,7 @@ button:hover {
   margin-top: 0;
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  height: inherit;
   max-width: 120px;
-  max-height: 100%;
   object-fit: cover;
 }
 
@@ -137,17 +139,18 @@ button:hover {
   word-break: break-word;
 }
 
-.rating {
-  margin-top: 1.5em;
+.review .rating {
+  margin-top: 1.0em;
+}
+
+.review .rating .number {
+  font-size: 0.8em;
 }
 
 .star {
   color: gold;
-  /* Change color to gold for filled stars */
   font-size: 1.4em;
-  /* Adjust size if needed */
   margin-right: 2px;
-  /* Space between stars */
 }
 
 footer {
@@ -155,4 +158,9 @@ footer {
   padding: 20px;
   background: #f7f7f7;
   margin-top: auto;
+}
+
+footer a {
+  text-decoration: none;
+  color: #007bff;
 }
