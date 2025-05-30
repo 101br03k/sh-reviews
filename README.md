@@ -7,7 +7,8 @@ A simple and elegant web application that allows users to submit and view review
 - Submit reviews, text content, and star ratings (1-5 stars)
 - Upload images with reviews
 - View all reviews in chronological order (newest first)
-- Edit existing reviews
+- **Markdown support** for both review titles and review text fields
+- Edit existing reviews with live markdown preview
 - Delete reviews (with automatic image cleanup)
 - Responsive design with clean UI
 - SQLite database for data persistence
@@ -28,7 +29,7 @@ review-website/
 │   ├── views/
 │   │   ├── index.ejs            # Main page displaying all reviews
 │   │   ├── submit.ejs           # Review submission form
-│   │   └── edit.ejs             # Review editing form
+│   │   └── edit.ejs             # Review editing form (with markdown preview)
 │   └── public/
 │       ├── style.css            # Application styles
 │       ├── uploads/             # Directory for uploaded images
@@ -56,6 +57,13 @@ review-website/
 3. Click "Submit a Review" to add a new review
 4. Use the edit/delete buttons on existing reviews to modify them
 
+## Markdown Support
+
+- **Both the review title and review text fields support Markdown formatting.**
+- Markdown is rendered on the main page, in the edit view (with live preview), and for all reviews.
+- Example formatting:
+  - `**bold**`, `*italic*`, `# Heading`, `- lists`, etc.
+
 ## Database Schema
 
 The application uses SQLite with the following table structure:
@@ -78,6 +86,7 @@ CREATE TABLE reviews (
 - **SQLite3**: Database engine
 - **Multer**: Middleware for handling file uploads
 - **Body-parser**: Middleware for parsing form data
+- **markdown-it**: Markdown parser and renderer for Node.js
 
 ## Contributing
 
@@ -85,4 +94,4 @@ Feel free to submit issues or pull requests if you have suggestions or improveme
 
 ## License
 
-GPL-3.0 license, which can be found in full detail in the LICENCE file. 
+GPL-3.0 license, which can be found in full detail in the LICENCE file.

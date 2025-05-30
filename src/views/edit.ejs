@@ -11,7 +11,11 @@
     <h1>Edit Review</h1>
     <form action="/update/<%= review.id %>" method="POST" enctype="multipart/form-data">
       <input type="text" name="title" value="<%= review.title %>" required>
+      <div class="preview-label">Title Preview:</div>
+      <div class="title-preview" style="margin-bottom:1em;"><%- review.title_html %></div>
       <textarea name="review" required><%= review.review %></textarea><br>
+      <div class="preview-label">Review Preview:</div>
+      <div class="review-preview" style="margin-bottom:1em;"><%- review.review_html %></div>
       <div>
         <label>Current Image:</label><br>
         <img id="current-image" src="<%= review.image %>" alt="Current Image" style="max-width: 100%;">
