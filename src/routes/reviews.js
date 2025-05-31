@@ -5,11 +5,11 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 const markdownIt = require("markdown-it");
+const md = markdownIt();
 
 const db = new sqlite3.Database(
   path.join(__dirname, "..", "db", "database.sqlite"),
 );
-const md = markdownIt();
 
 // Set up multer for image uploads
 const uploadDir = path.join(__dirname, "..", "public", "uploads");
@@ -130,6 +130,21 @@ router.post("/delete/:id", (req, res) => {
       res.redirect("/");
     });
   });
+});
+
+// POST /reviews/preview - Render a preview of the review
+router.post('/preview', express.json(), (req, res) => {
+  const { title, review, rating, image } = req.body;
+  // Render markdown for title and review
+  const reviewObj = {
+    title,
+    review,
+    rating,
+    image,
+    title_html: md.renderInline(title || ''),
+    review_html: md.render(review || '')
+  };
+  res.render('partials/review', { review: reviewObj, layout: false });
 });
 
 module.exports = router;
