@@ -5,7 +5,7 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 const markdownIt = require("markdown-it");
-const md = markdownIt();
+const md = markdownIt({ breaks: true }); // Enable line breaks on single newline
 
 const db = new sqlite3.Database(
   path.join(__dirname, "..", "db", "database.sqlite"),
