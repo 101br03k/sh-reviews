@@ -1,0 +1,23 @@
+<div class="review">
+    <h1>Preview: </h1>
+    <div class="review-header">
+        <span class="titleclass"><%- review.title_html %></span>
+    </div>
+    <div class="review-content">
+        <div class="text">
+            <%- review.review_html %>
+        </div>
+        <% if (review.image) { %>
+            <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>">
+        <% } %>
+    </div>
+    <div class="rating">Rating: 
+        <% for (let i = 0; i < review.rating; i++) { %>
+        <span class="star">★</span>
+        <% } %>
+        <% for (let i = review.rating; i < 5; i++) { %>
+        <span class="star">☆</span>
+        <% } %>
+        <span class="number">(<%= review.rating %>/5)</span>
+    </div>
+</div>

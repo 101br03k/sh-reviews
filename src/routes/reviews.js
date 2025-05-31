@@ -82,7 +82,7 @@ router.get("/edit/:id", (req, res) => {
 // POST updated review
 router.post("/update/:id", upload.single("image"), (req, res) => {
   const id = req.params.id;
-  const { title, review, rating } = req.body;
+  const { title, review, rating, currentImage } = req.body;
 
   // Get the old image path first
   db.get("SELECT image FROM reviews WHERE id = ?", [id], (err, row) => {
@@ -99,6 +99,8 @@ router.post("/update/:id", upload.single("image"), (req, res) => {
         fs.unlink(oldImgPath, () => {});
       }
       imagePath = "/uploads/" + req.file.filename;
+    } else if (currentImage) {
+      imagePath = currentImage;
     }
 
     db.run(
@@ -133,18 +135,21 @@ router.post("/delete/:id", (req, res) => {
 });
 
 // POST /reviews/preview - Render a preview of the review
-router.post('/preview', express.json(), (req, res) => {
-  const { title, review, rating, image } = req.body;
-  // Render markdown for title and review
-  const reviewObj = {
-    title,
-    review,
-    rating,
-    image,
-    title_html: md.renderInline(title || ''),
-    review_html: md.render(review || '')
-  };
-  res.render('partials/review', { review: reviewObj, layout: false });
-});
+router.post(
+  '/preview',
+  express.json({ limit: '5mb' }), // Increase limit for large base64 images
+  (req, res) => {
+    const { title, review, rating, image } = req.body;
+    // ...existing code...
+    res.render('partials/review', { review: {
+      title,
+      review,
+      rating,
+      image,
+      title_html: md.renderInline(title || ''),
+      review_html: md.render(review || '')
+    }, layout: false });
+  }
+);
 
 module.exports = router;

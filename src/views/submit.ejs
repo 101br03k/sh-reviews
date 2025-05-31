@@ -9,6 +9,12 @@
 </head>
 <body>
   <div class="container">
+    <div>
+      <button id="editTab" class="tab active">Edit</button>
+      <button id="previewTab" class="tab">Preview</button>
+    </div>
+    <div id="previewSection" style="display:none;"></div>
+    <div id="editorSection">
     <h1>Submit a Review</h1>
     <form action="/submit" method="POST" enctype="multipart/form-data">
       <input type="text" name="title" placeholder="Product / Item Name" required>
@@ -21,10 +27,58 @@
         <option value="3">3 Stars</option>
         <option value="4">4 Stars</option>
         <option value="5">5 Stars</option>
-      </select>
-      <button type="submit">Submit Review</button>
+      </select><br><br>
+      <a href="/" class="button" style="float: left;">Cancel & Back to Reviews</a>
+    <button type="submit" style="float: right; margin-left: 5px;">Submit Review</button>
     </form>
-    <a href="/">Back to Reviews</a>
+    </div>
+    
   </div>
+  <script>
+  const editTab = document.getElementById('editTab');
+  const previewTab = document.getElementById('previewTab');
+  const editorSection = document.getElementById('editorSection');
+  const previewSection = document.getElementById('previewSection');
+  const imageInput = document.querySelector('input[name="image"]');
+  const currentImage = document.getElementById('current-image');
+
+  editTab.onclick = () => {
+    editTab.classList.add('active');
+    previewTab.classList.remove('active');
+    editorSection.style.display = '';
+    previewSection.style.display = 'none';
+  };
+
+  previewTab.onclick = async () => {
+    previewTab.classList.add('active');
+    editTab.classList.remove('active');
+    editorSection.style.display = 'none';
+    previewSection.style.display = '';
+
+    // Gather form data
+    const title = document.querySelector('[name="title"]').value;
+    const review = document.querySelector('[name="review"]').value;
+    const rating = document.querySelector('[name="rating"]').value;
+
+    // Handle image preview: if a new image is selected, use FileReader
+    let imageSrc = currentImage ? currentImage.src : '';
+    if (imageInput && imageInput.files && imageInput.files[0]) {
+      const file = imageInput.files[0];
+      imageSrc = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Fetch preview HTML from server
+    const res = await fetch('/preview', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ title, review, rating, image: imageSrc })
+    });
+    previewSection.innerHTML = await res.text();
+  };
+</script>
 </body>
 </html>

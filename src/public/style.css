@@ -164,3 +164,17 @@ footer a {
   text-decoration: none;
   color: #007bff;
 }
+
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  background: #eee;
+  border-radius: 4px 4px 0 0;
+  margin-right: 4px;
+  font-size: 1em;
+}
+.tab.active {
+  background: #ccc;
+  font-weight: bold;
+}
