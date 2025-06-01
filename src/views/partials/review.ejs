@@ -7,9 +7,12 @@
         <div class="text">
             <%- review.review_html %>
         </div>
-        <% if (review.image) { %>
-            <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>">
-        <% } %>
+              <% review.images.forEach(img => { %>
+                <label style="display:inline-block; margin-right:1em;">
+                  <img src="<%= img.image %>" alt="Review Image" style="max-width:80px; max-height:80px; display:block;">
+                  <input type="checkbox" name="keepImages" value="<%= img.image %>" checked> Keep
+                </label>
+              <% }) %>
     </div>
     <div class="rating">Rating: 
         <% for (let i = 0; i < review.rating; i++) { %>

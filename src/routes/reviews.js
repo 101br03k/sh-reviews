@@ -26,21 +26,16 @@ router.get("/", (req, res) => {
   db.all("SELECT * FROM reviews ORDER BY created_at DESC", [], (err, rows) => {
     if (err) {
       console.error(err);
-      return res.render("index", {
-        reviews: [],
-        error: "Error retrieving reviews",
-        reviewCount: 0
-      });
+      return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
     }
-    const reviews = rows.map(r => ({
-      ...r,
-      title_html: md.renderInline(r.title),
-      review_html: md.render(r.review)
-    }));
-    res.render("index", {
-      reviews,
-      error: null,
-      reviewCount: reviews.length
+    db.all("SELECT * FROM review_images", [], (imgErr, images) => {
+      const reviews = rows.map(r => ({
+        ...r,
+        title_html: md.renderInline(r.title),
+        review_html: md.render(r.review),
+        images: images.filter(img => img.review_id === r.id)
+      }));
+      res.render("index", { reviews, error: null, reviewCount: reviews.length });
     });
   });
 });
@@ -51,21 +46,29 @@ router.get("/submit", (req, res) => {
 });
 
 // POST a new review with image
-router.post("/submit", upload.single("image"), (req, res) => {
-  const { title, review, rating } = req.body; // Get rating from body
-  const image = req.file ? "/uploads/" + req.file.filename : null;
+router.post("/submit", upload.array("images", 10), (req, res) => {
+  const { title, review, rating } = req.body;
   if (!title || !review || !rating) return res.redirect("/");
 
   db.run(
-    "INSERT INTO reviews (title, review, image, rating) VALUES (?, ?, ?, ?)",
-    [title, review, image, rating],
+    "INSERT INTO reviews (title, review, rating) VALUES (?, ?, ?)",
+    [title, review, rating],
     function (err) {
       if (err) {
         console.error(err);
         return res.redirect("/");
       }
-      res.redirect("/");
-    },
+      const reviewId = this.lastID;
+      if (req.files && req.files.length > 0) {
+        const stmt = db.prepare("INSERT INTO review_images (review_id, image) VALUES (?, ?)");
+        req.files.forEach(file => {
+          stmt.run(reviewId, "/uploads/" + file.filename);
+        });
+        stmt.finalize(() => res.redirect("/"));
+      } else {
+        res.redirect("/");
+      }
+    }
   );
 });
 
@@ -73,52 +76,49 @@ router.post("/submit", upload.single("image"), (req, res) => {
 router.get("/edit/:id", (req, res) => {
   const id = req.params.id;
   db.get("SELECT * FROM reviews WHERE id = ?", [id], (err, review) => {
-    if (err || !review) {
-      return res.redirect("/");
-    }
-    // Render markdown for title and review fields
-    review.title_html = md.renderInline(review.title);
-    review.review_html = md.render(review.review);
-    res.render("edit", { review });
+    if (err || !review) return res.redirect("/");
+    db.all("SELECT * FROM review_images WHERE review_id = ?", [id], (imgErr, images) => {
+      review.images = images || [];
+      review.title_html = md.renderInline(review.title);
+      review.review_html = md.render(review.review);
+      res.render("edit", { review });
+    });
   });
 });
 
 // POST updated review
-router.post("/update/:id", upload.single("image"), (req, res) => {
+router.post("/update/:id", upload.array("images", 10), (req, res) => {
   const id = req.params.id;
-  const { title, review, rating, currentImage } = req.body;
+  const { title, review, rating, keepImages = [] } = req.body;
 
-  // Get the old image path first
-  db.get("SELECT image FROM reviews WHERE id = ?", [id], (err, row) => {
-    if (err || !row) {
-      console.error(err);
-      return res.redirect("/");
-    }
-
-    let imagePath = row.image;
-    if (req.file) {
-      // Delete old image if it exists
-      if (imagePath) {
-        const oldImgPath = path.join(__dirname, "..", "public", imagePath);
-        fs.unlink(oldImgPath, () => {});
+  db.run(
+    "UPDATE reviews SET title = ?, review = ?, rating = ? WHERE id = ?",
+    [title, review, rating, id],
+    function (err) {
+      if (err) {
+        console.error(err);
+        return res.redirect("/");
       }
-      imagePath = "/uploads/" + req.file.filename;
-    } else if (currentImage) {
-      imagePath = currentImage;
-    }
-
-    db.run(
-      "UPDATE reviews SET title = ?, review = ?, image = ?, rating = ? WHERE id = ?",
-      [title, review, imagePath, rating, id],
-      (err) => {
-        if (err) {
-          console.error(err);
-          return res.redirect("/");
+      db.all("SELECT * FROM review_images WHERE review_id = ?", [id], (err, rows) => {
+        rows.forEach(img => {
+          if (!Array.isArray(keepImages) || !keepImages.includes(img.image)) {
+            const imgPath = path.join(__dirname, "..", "public", img.image);
+            fs.unlink(imgPath, () => {});
+            db.run("DELETE FROM review_images WHERE id = ?", [img.id]);
+          }
+        });
+        if (req.files && req.files.length > 0) {
+          const stmt = db.prepare("INSERT INTO review_images (review_id, image) VALUES (?, ?)");
+          req.files.forEach(file => {
+            stmt.run(id, "/uploads/" + file.filename);
+          });
+          stmt.finalize(() => res.redirect("/"));
+        } else {
+          res.redirect("/");
         }
-        res.redirect("/");
-      }
-    );
-  });
+      });
+    }
+  );
 });
 
 // DELETE a review
@@ -141,18 +141,21 @@ router.post("/delete/:id", (req, res) => {
 // POST /preview - Render a preview of the review
 router.post(
   '/preview',
-  express.json({ limit: '5mb' }), // Increase limit for large base64 images
+  express.json({ limit: '5mb' }),
   (req, res) => {
-    const { title, review, rating, image } = req.body;
-    // ...existing code...
-    res.render('partials/review', { review: {
-      title,
-      review,
-      rating,
-      image,
-      title_html: md.renderInline(title || ''),
-      review_html: md.render(review || '')
-    }, layout: false });
+    const { title, review, rating, images } = req.body;
+    // images: array of base64 strings or URLs
+    res.render('partials/review', {
+      review: {
+        title,
+        review,
+        rating,
+        images: Array.isArray(images) ? images : (images ? [images] : []),
+        title_html: md.renderInline(title || ''),
+        review_html: md.render(review || '')
+      },
+      layout: false
+    });
   }
 );
 

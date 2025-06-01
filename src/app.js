@@ -19,6 +19,16 @@ db.run(`
   )
 `);
 
+// Create the review_images table if it doesn't exist
+db.run(`
+  CREATE TABLE IF NOT EXISTS review_images (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    review_id INTEGER,
+    image TEXT,
+    FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE
+  )
+`);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

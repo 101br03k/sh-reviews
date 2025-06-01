@@ -16,6 +16,7 @@ A simple and elegant web application that allows users to submit, view, edit, an
 - **Image popup**: Click on a review image to view it larger in an overlay.
 - **SQLite database** for data persistence.
 - **Automatic database and upload folder creation** on first run.
+- **Multiple images per review**: Attach several images to each review. You can add, preview, and remove images when submitting or editing.
 
 ---
 
