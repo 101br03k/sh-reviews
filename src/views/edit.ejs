@@ -74,18 +74,27 @@
     const review = document.querySelector('[name="review"]').value;
     const rating = document.querySelector('[name="rating"]').value;
 
-    // Gather all selected images as base64
+    // Gather all selected new images as base64
     const imagesInput = document.querySelector('input[name="images"]');
-    let images = [];
+    let newImages = [];
     if (imagesInput && imagesInput.files && imagesInput.files.length > 0) {
       for (let i = 0; i < imagesInput.files.length; i++) {
-        images.push(await new Promise(resolve => {
+        newImages.push(await new Promise(resolve => {
           const reader = new FileReader();
           reader.onload = e => resolve(e.target.result);
           reader.readAsDataURL(imagesInput.files[i]);
         }));
       }
     }
+
+    // Gather checked existing images (those the user wants to keep)
+    let existingImages = [];
+    document.querySelectorAll('input[name="keepImages"]:checked').forEach(cb => {
+      existingImages.push(cb.value);
+    });
+
+    // Combine both arrays
+    const images = existingImages.concat(newImages);
 
     // Fetch preview HTML from server
     const res = await fetch('/preview', {

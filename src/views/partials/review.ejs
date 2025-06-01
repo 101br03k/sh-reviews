@@ -8,10 +8,7 @@
             <%- review.review_html %>
         </div>
               <% review.images.forEach(img => { %>
-                <label style="display:inline-block; margin-right:1em;">
-                  <img src="<%= img.image %>" alt="Review Image" style="max-width:80px; max-height:80px; display:block;">
-                  <input type="checkbox" name="keepImages" value="<%= img.image %>" checked> Keep
-                </label>
+                <img src="<%= img.image ? img.image : img %>" alt="Review Image" style="max-width:80px; max-height:80px; display:block; margin-right:1em;">
               <% }) %>
     </div>
     <div class="rating">Rating: 
