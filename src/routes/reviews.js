@@ -29,15 +29,19 @@ router.get("/", (req, res) => {
       return res.render("index", {
         reviews: [],
         error: "Error retrieving reviews",
+        reviewCount: 0
       });
     }
-    // Render markdown for title and review fields
     const reviews = rows.map(r => ({
       ...r,
       title_html: md.renderInline(r.title),
       review_html: md.render(r.review)
     }));
-    res.render("index", { reviews, error: null });
+    res.render("index", {
+      reviews,
+      error: null,
+      reviewCount: reviews.length
+    });
   });
 });
 
@@ -134,7 +138,7 @@ router.post("/delete/:id", (req, res) => {
   });
 });
 
-// POST /reviews/preview - Render a preview of the review
+// POST /preview - Render a preview of the review
 router.post(
   '/preview',
   express.json({ limit: '5mb' }), // Increase limit for large base64 images
