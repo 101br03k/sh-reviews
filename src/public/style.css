@@ -178,3 +178,10 @@ footer a {
   background: #ccc;
   font-weight: bold;
 }
+
+.edit-actions {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  margin-top: 1em;
+}
