@@ -1,5 +1,5 @@
 services:
-  reviews-app:
+  sh-reviews:
     build: .
     ports:
       - "3000:3000"
