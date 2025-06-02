@@ -24,11 +24,16 @@
       <strong>Total Reviews: <%= reviewCount %></strong>
     </div>
     <% reviews.forEach(review => { %>
-      <div class="review" <% if (review.rating == 5) { %>id=fivestarreview<% } %>>
+      <div class="review" <% if (review.rating == 5) { %>id=fivestar-review<% } %>>
         <div class="review-header">
-          <% if (review.rating == 5) { %><span class="star">★</span><% } %>
-          <span class="titleclass" <% if (review.rating == 5) { %>id=fivestarstitle<% } %>><%- review.title_html %></span>
-          <% if (review.rating == 5) { %><span class="star">★</span><% } %>
+          <% if (review.rating == 5) { %>
+            <div id="fivestar-bar" >
+            <span class="star">★</span><% } %>
+          <span class="titleclass" <% if (review.rating == 5) { %>id=fivestar-stitle<% } %>><%- review.title_html %></span>
+          <% if (review.rating == 5) { %>
+            <span class="star">★</span>
+            </div>
+          <% } %>
           <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
         </div>
         <div class="review-content">
