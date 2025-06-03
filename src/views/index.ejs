@@ -36,16 +36,16 @@
           <% } %>
           <% if (review.images && review.images.length > 0) { %>
             <div class="carousel" data-review-id="<%= review.id %>">
-              <button class="carousel-btn left" onclick="prevImage(<%= review.id %>)">&#8592;</button>
               <% review.images.forEach((img, idx) => { %>
                 <img 
                   src="<%= img.image ? img.image : img %>" 
-                  alt="Review Image id:<%= review.id %>" 
+                  alt="Review Image id:<%= review.id %> - <%= idx + 1 %> of <%= review.images.length %>" 
                   class="carousel-img" 
                   data-index="<%= idx %>" 
-                  style="<%= idx === 0 ? '' : 'display:none;' %>max-width:200px;max-height:200px;"
+                  style="<%= (idx === 0 ? '' : 'display:none; ') %>max-width:200px; max-height:200px;"
                 >
               <% }) %>
+              <button class="carousel-btn left" onclick="prevImage(<%= review.id %>)">&#8592;</button>
               <button class="carousel-btn right" onclick="nextImage(<%= review.id %>, <%= review.images.length %>)">&#8594;</button>
             </div>
           <% } %>
