@@ -1,18 +1,24 @@
 <div class="review">
     <h1>Preview: </h1>
-    <div <% if (review.rating == 5) { %>id=fivestarreview<% } %>>
+    <div <% if (review.rating == 5) { %>id=fivestar-review<% } %>>
     <div class="review-header">
-        <% if (review.rating == 5) { %><span class="star">★</span><% } %>
-        <span class="titleclass" <% if (review.rating == 5) { %>id=fivestarstitle<% } %>><%- review.title_html %></span>
-        <% if (review.rating == 5) { %><span class="star">★</span><% } %>
+        <% if (review.rating == 5) { %>
+            <div id="fivestar-bar" >
+            <span class="star">★</span>
+        <% } %>
+        <span class="titleclass" <% if (review.rating == 5) { %>id=fivestar-stitle<% } %>><%- review.title_html %></span>
+        <% if (review.rating == 5) { %>
+            <span class="star">★</span>
+            </div>
+        <% } %>
     </div>
     <div class="review-content">
         <div class="text">
             <%- review.review_html %>
         </div>
-              <% review.images.forEach(img => { %>
-                <img src="<%= img.image ? img.image : img %>" alt="Review Image" style="max-width:80px; max-height:80px; display:block; margin-right:1em;">
-              <% }) %>
+        <% if (review.image) { %>
+            <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>">
+        <% } %>
     </div>
     <div class="rating">Rating: 
         <% for (let i = 0; i < review.rating; i++) { %>
