@@ -23,21 +23,50 @@ const upload = multer({ storage });
 
 // GET all reviews
 router.get("/", (req, res) => {
-  db.all("SELECT * FROM reviews ORDER BY created_at DESC", [], (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
-    }
-    db.all("SELECT * FROM review_images", [], (imgErr, images) => {
-      const reviews = rows.map(r => ({
-        ...r,
-        title_html: md.renderInline(r.title),
-        review_html: md.render(r.review),
-        images: images.filter(img => img.review_id === r.id)
-      }));
-      res.render("index", { reviews, error: null, reviewCount: reviews.length });
+  // Sorting logic
+  const sort = req.query.sort || "date"; // default sort by date (new to old)
+  let orderBy = "created_at DESC";
+  if (sort === "stars") orderBy = "rating DESC, created_at DESC";
+  if (sort === "images") orderBy = "image_count DESC, created_at DESC";
+
+  // If sorting by images, join and count images per review
+  if (sort === "images") {
+    db.all(`SELECT r.*, COUNT(ri.id) as image_count FROM reviews r LEFT JOIN review_images ri ON r.id = ri.review_id GROUP BY r.id ORDER BY ${orderBy}`,
+      [], (err, rows) => {
+        if (err) {
+          console.error(err);
+          return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
+        }
+        db.all("SELECT * FROM review_images", [], (imgErr, images) => {
+          const reviews = rows.map(r => ({
+            ...r,
+            title_html: md.renderInline(r.title),
+            review_html: md.render(r.review),
+            images: images.filter(img => img.review_id === r.id)
+          }));
+          res.render("index", { reviews, error: null, reviewCount: reviews.length, req });
+        });
+      });
+    return;
+  }
+
+  // Default: sort by date or stars
+  db.all(`SELECT * FROM reviews ORDER BY ${orderBy}`,
+    [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
+      }
+      db.all("SELECT * FROM review_images", [], (imgErr, images) => {
+        const reviews = rows.map(r => ({
+          ...r,
+          title_html: md.renderInline(r.title),
+          review_html: md.render(r.review),
+          images: images.filter(img => img.review_id === r.id)
+        }));
+        res.render("index", { reviews, error: null, reviewCount: reviews.length, req });
+      });
     });
-  });
 });
 
 // GET submission page

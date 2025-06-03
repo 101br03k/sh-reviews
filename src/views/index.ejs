@@ -23,6 +23,16 @@
     <div style="text-align:center; margin-bottom:1em;">
       <strong>Total Reviews: <%= reviewCount %></strong>
     </div>
+    <div style="text-align:center; margin-bottom:2em;">
+      <form method="get" action="/" style="display:inline-block;">
+        <label for="sort">Sort by:</label>
+        <select name="sort" id="sort" onchange="this.form.submit()">
+          <option value="date" <%= (!req || !req.query || req.query.sort === 'date' || !req.query.sort) ? 'selected' : '' %>>Newest</option>
+          <option value="stars" <%= req && req.query && req.query.sort === 'stars' ? 'selected' : '' %>>Stars</option>
+          <option value="images" <%= req && req.query && req.query.sort === 'images' ? 'selected' : '' %>>Most Images</option>
+        </select>
+      </form>
+    </div>
     <% reviews.forEach(review => { %>
       <div class="review" <% if (review.rating == 5) { %>id=fivestar-review<% } %>>
         <div class="review-header">
@@ -35,6 +45,9 @@
             </div>
           <% } %>
           <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
+          <% if (typeof review.image_count !== 'undefined') { %>
+            <span class="date" style="margin-left:1em;">Images: <%= review.image_count %></span>
+          <% } %>
         </div>
         <div class="review-content">
           <div class="text"><%- review.review_html %></div>
@@ -49,12 +62,12 @@
                   alt="Review Image id:<%= review.id %> - <%= idx + 1 %> of <%= review.images.length %>" 
                   class="carousel-img" 
                   data-index="<%= idx %>" 
-                  style="<%= (idx === 0 ? '' : 'display:none; ') %>max-width:200px; max-height:200px;"
+                  style="max-width:200px;max-height:200px;"<% if (idx !== 0) { %> hidden<% } %>
                 >
               <% }) %>
               <% if (review.images.length > 1) { %>
-                <button class="carousel-btn left" onclick="prevImage(<%= review.id %>)">&#8592;</button>
-                <button class="carousel-btn right" onclick="nextImage(<%= review.id %>, <%= review.images.length %>)">&#8594;</button>
+                <button class="carousel-btn left" type="button" onclick="prevImage(<%= review.id %>)">&#8592;</button>
+                <button class="carousel-btn right" type="button" onclick="nextImage(<%= review.id %>, <%= review.images.length %>)">&#8594;</button>
               <% } %>
             </div>
           <% } %>
