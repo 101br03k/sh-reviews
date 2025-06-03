@@ -27,13 +27,18 @@
           <option value="4" <%= review.rating == 4 ? 'selected' : '' %>>4 Stars</option>
           <option value="5" <%= review.rating == 5 ? 'selected' : '' %>>5 Stars</option>
         </select><br><br>
-          <div>
-            <label for="image">Change Image (will only be updated on preview page): </label>
-            <input type="file" id="image" name="image" accept="image/*"><br><br>
-            <input type="hidden" name="currentImage" value="<%= review.image %>">
-            Current Image:
-            <img id="current-image" src="<%= review.image %>" alt="Current Image" style="max-width: 20%; max-height: 20%;"><br>
-          </div>
+          <% if (review.images && review.images.length > 0) { %>
+            <div>
+              <strong>Current Images:</strong><br>
+              <% review.images.forEach(img => { %>
+                <label style="display:inline-block; margin-right:1em;">
+                  <img src="<%= img.image %>" alt="Review Image" style="max-width:80px; max-height:80px; display:block;">
+                  <input type="checkbox" name="keepImages" value="<%= img.image %>" checked> Keep
+                </label>
+              <% }) %>
+            </div>
+          <% } %>
+        <input type="file" name="images" accept="image/*" multiple>
         <div class="edit-actions">
           <button type="submit">Update Review</button>
           <a href="/" class="button">Cancel Edit</a>
@@ -69,22 +74,33 @@
     const review = document.querySelector('[name="review"]').value;
     const rating = document.querySelector('[name="rating"]').value;
 
-    // Handle image preview: if a new image is selected, use FileReader
-    let imageSrc = currentImage ? currentImage.src : '';
-    if (imageInput && imageInput.files && imageInput.files[0]) {
-      const file = imageInput.files[0];
-      imageSrc = await new Promise(resolve => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.readAsDataURL(file);
-      });
+    // Gather all selected new images as base64
+    const imagesInput = document.querySelector('input[name="images"]');
+    let newImages = [];
+    if (imagesInput && imagesInput.files && imagesInput.files.length > 0) {
+      for (let i = 0; i < imagesInput.files.length; i++) {
+        newImages.push(await new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.readAsDataURL(imagesInput.files[i]);
+        }));
+      }
     }
+
+    // Gather checked existing images (those the user wants to keep)
+    let existingImages = [];
+    document.querySelectorAll('input[name="keepImages"]:checked').forEach(cb => {
+      existingImages.push(cb.value);
+    });
+
+    // Combine both arrays
+    const images = existingImages.concat(newImages);
 
     // Fetch preview HTML from server
     const res = await fetch('/preview', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ title, review, rating, image: imageSrc })
+      body: JSON.stringify({ title, review, rating, images })
     });
     previewSection.innerHTML = await res.text();
   };

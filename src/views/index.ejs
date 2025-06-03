@@ -41,6 +41,21 @@
           <% if (review.image) { %>
             <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>">
           <% } %>
+          <% if (review.images && review.images.length > 0) { %>
+            <div class="carousel" data-review-id="<%= review.id %>">
+              <% review.images.forEach((img, idx) => { %>
+                <img 
+                  src="<%= img.image ? img.image : img %>" 
+                  alt="Review Image id:<%= review.id %> - <%= idx + 1 %> of <%= review.images.length %>" 
+                  class="carousel-img" 
+                  data-index="<%= idx %>" 
+                  style="<%= (idx === 0 ? '' : 'display:none; ') %>max-width:200px; max-height:200px;"
+                >
+              <% }) %>
+              <button class="carousel-btn left" onclick="prevImage(<%= review.id %>)">&#8592;</button>
+              <button class="carousel-btn right" onclick="nextImage(<%= review.id %>, <%= review.images.length %>)">&#8594;</button>
+            </div>
+          <% } %>
         </div>
         <div class="rating">Rating: 
           <% for (let i = 0; i < review.rating; i++) { %>
@@ -61,5 +76,40 @@
     source: <a href="https://github.com/101br03k/sh-reviews">github.com/101br03k/sh-reviews</a> | Made with mainly <a href="https://nodejs.org">Node.js</a>.<br>
     Under some sort of licence called: <a href="https://github.com/101br03k/sh-reviews/blob/main/LICENSE">GNU General Public License v3.0. </a>
   </footer>
+  <script>
+function showImage(reviewId, idx, total) {
+  const carousel = document.querySelector('.carousel[data-review-id="' + reviewId + '"]');
+  if (!carousel) return;
+  const imgs = carousel.querySelectorAll('.carousel-img');
+  imgs.forEach((img, i) => {
+    img.style.display = (i === idx) ? '' : 'none';
+  });
+  carousel.setAttribute('data-current', idx);
+}
+
+function prevImage(reviewId) {
+  const carousel = document.querySelector('.carousel[data-review-id="' + reviewId + '"]');
+  if (!carousel) return;
+  const total = carousel.querySelectorAll('.carousel-img').length;
+  let idx = parseInt(carousel.getAttribute('data-current') || '0', 10);
+  idx = (idx - 1 + total) % total;
+  showImage(reviewId, idx, total);
+}
+
+function nextImage(reviewId, total) {
+  const carousel = document.querySelector('.carousel[data-review-id="' + reviewId + '"]');
+  if (!carousel) return;
+  let idx = parseInt(carousel.getAttribute('data-current') || '0', 10);
+  idx = (idx + 1) % total;
+  showImage(reviewId, idx, total);
+}
+
+// Initialize all carousels
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    carousel.setAttribute('data-current', 0);
+  });
+});
+</script>
 </body>
 </html>

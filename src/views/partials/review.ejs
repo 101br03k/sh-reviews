@@ -10,9 +10,9 @@
         <div class="text">
             <%- review.review_html %>
         </div>
-        <% if (review.image) { %>
-            <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>">
-        <% } %>
+              <% review.images.forEach(img => { %>
+                <img src="<%= img.image ? img.image : img %>" alt="Review Image" style="max-width:80px; max-height:80px; display:block; margin-right:1em;">
+              <% }) %>
     </div>
     <div class="rating">Rating: 
         <% for (let i = 0; i < review.rating; i++) { %>
