@@ -3,14 +3,14 @@
 <head>
   <title>SH-Reviews</title>
   <link rel="stylesheet" href="/style.css">
-  <link rel="icon" type="image/x-icon" href="/SH-Reviews-logo/icon.png">
-  <link rel="apple-touch-icon" href="/SH-Reviews-logo/icon.png">
+  <link rel="icon" type="image/x-icon" href="/images/logos/icon.png">
+  <link rel="apple-touch-icon" href="/images/logos/icon.png">
   <script src="/review-image-adjust.js"></script>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <img alt="SH-Reviews Logo" class="logo" src="/SH-Reviews-logo/vector/default.svg">
+      <img alt="SH-Reviews Logo" class="logo" src="/images/logos/vector/default.svg">
     </div>
     <% if (error) { %>
       <div style="color: red;"><%= error %></div>
@@ -24,9 +24,16 @@
       <strong>Total Reviews: <%= reviewCount %></strong>
     </div>
     <% reviews.forEach(review => { %>
-      <div class="review">
+      <div class="review" <% if (review.rating == 5) { %>id=fivestar-review<% } %>>
         <div class="review-header">
-          <span class="titleclass"><%- review.title_html %></span>
+          <% if (review.rating == 5) { %>
+            <div id="fivestar-bar" >
+            <span class="star">★</span><% } %>
+          <span class="titleclass" <% if (review.rating == 5) { %>id=fivestar-stitle<% } %>><%- review.title_html %></span>
+          <% if (review.rating == 5) { %>
+            <span class="star">★</span>
+            </div>
+          <% } %>
           <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
         </div>
         <div class="review-content">

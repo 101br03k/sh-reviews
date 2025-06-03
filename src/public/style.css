@@ -16,9 +16,10 @@ body {
   max-width: 60vw;
   margin: 40px auto;
   background: #fefefe;
-  padding: 2em;
+  padding: 1em;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 30%;
 }
 
 .header {
@@ -96,7 +97,7 @@ button:hover {
 
 .review {
   border-bottom: 1px solid #eee;
-  padding: 1em 0;
+  padding: 1em;
   display: flex;
   flex-direction: column;
 }
@@ -110,13 +111,41 @@ button:hover {
 .review .titleclass {
   font-weight: bold;
   color: #007bff;
-  margin-right: 1em;
+  
   font-size: 1.25em;
+}
+
+.star-icon {
+  width: 2%;
+  height: 2%;
+  vertical-align: middle;
+}
+
+#fivestar-review {
+  background-image: url("/images/Star+Pattern+3.svg");
+  background-repeat: repeat;
+  background-color: #ffff0062;
+  background-size: 10%;
+  background-position-x: -25%;
+  background-position-y: -25%;
+}
+
+#fivestar-bar{
+  background: linear-gradient(90deg, #000851 0%, #1CB5E0 100%);
+  display: inline-block;
+  padding: 0.2em 0.7em;
+  border-radius: 6px;
+}
+
+#fivestar-stitle{
+  color: gold;
+  display: inline-block;
 }
 
 .review .date {
   color: #888;
   font-size: 0.8em;
+  margin-left: 1em;
 }
 
 .review-content {
@@ -150,7 +179,6 @@ button:hover {
 .star {
   color: gold;
   font-size: 1.4em;
-  margin-right: 2px;
 }
 
 footer {
