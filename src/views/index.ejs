@@ -52,8 +52,10 @@
                   style="<%= (idx === 0 ? '' : 'display:none; ') %>max-width:200px; max-height:200px;"
                 >
               <% }) %>
-              <button class="carousel-btn left" onclick="prevImage(<%= review.id %>)">&#8592;</button>
-              <button class="carousel-btn right" onclick="nextImage(<%= review.id %>, <%= review.images.length %>)">&#8594;</button>
+              <% if (review.images.length > 1) { %>
+                <button class="carousel-btn left" onclick="prevImage(<%= review.id %>)">&#8592;</button>
+                <button class="carousel-btn right" onclick="nextImage(<%= review.id %>, <%= review.images.length %>)">&#8594;</button>
+              <% } %>
             </div>
           <% } %>
         </div>
