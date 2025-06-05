@@ -23,21 +23,39 @@ const upload = multer({ storage });
 
 // GET all reviews
 router.get("/", (req, res) => {
-  db.all("SELECT * FROM reviews ORDER BY created_at DESC", [], (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
-    }
-    db.all("SELECT * FROM review_images", [], (imgErr, images) => {
-      const reviews = rows.map(r => ({
-        ...r,
-        title_html: md.renderInline(r.title),
-        review_html: md.render(r.review),
-        images: images.filter(img => img.review_id === r.id)
-      }));
-      res.render("index", { reviews, error: null, reviewCount: reviews.length });
+  // Sorting logic
+  const sort = req.query.sort || 'date';
+  const direction = req.query.direction === 'asc' ? 1 : -1;
+
+  db.all(`SELECT r.*, COUNT(ri.id) as image_count FROM reviews r LEFT JOIN review_images ri ON r.id = ri.review_id GROUP BY r.id`,
+    [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
+      }
+      db.all("SELECT * FROM review_images", [], (imgErr, images) => {
+        const reviews = rows.map(r => ({
+          ...r,
+          title_html: md.renderInline(r.title),
+          review_html: md.render(r.review),
+          images: images.filter(img => img.review_id === r.id)
+        }));
+
+        reviews.sort((a, b) => {
+          let cmp = 0;
+          if (sort === 'date') {
+            cmp = new Date(a.created_at) - new Date(b.created_at);
+          } else if (sort === 'stars') {
+            cmp = a.rating - b.rating;
+          } else if (sort === 'images') {
+            cmp = (a.image_count || 0) - (b.image_count || 0);
+          }
+          return cmp * direction;
+        });
+
+        res.render("index", { reviews, error: null, reviewCount: reviews.length, req });
+      });
     });
-  });
 });
 
 // GET submission page
