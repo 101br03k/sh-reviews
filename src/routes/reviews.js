@@ -24,34 +24,10 @@ const upload = multer({ storage });
 // GET all reviews
 router.get("/", (req, res) => {
   // Sorting logic
-  const sort = req.query.sort || "date"; // default sort by date (new to old)
-  let orderBy = "created_at DESC";
-  if (sort === "stars") orderBy = "rating DESC, created_at DESC";
-  if (sort === "images") orderBy = "image_count DESC, created_at DESC";
+  const sort = req.query.sort || 'date';
+  const direction = req.query.direction === 'asc' ? 1 : -1;
 
-  // If sorting by images, join and count images per review
-  if (sort === "images") {
-    db.all(`SELECT r.*, COUNT(ri.id) as image_count FROM reviews r LEFT JOIN review_images ri ON r.id = ri.review_id GROUP BY r.id ORDER BY ${orderBy}`,
-      [], (err, rows) => {
-        if (err) {
-          console.error(err);
-          return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
-        }
-        db.all("SELECT * FROM review_images", [], (imgErr, images) => {
-          const reviews = rows.map(r => ({
-            ...r,
-            title_html: md.renderInline(r.title),
-            review_html: md.render(r.review),
-            images: images.filter(img => img.review_id === r.id)
-          }));
-          res.render("index", { reviews, error: null, reviewCount: reviews.length, req });
-        });
-      });
-    return;
-  }
-
-  // Default: sort by date or stars
-  db.all(`SELECT * FROM reviews ORDER BY ${orderBy}`,
+  db.all(`SELECT r.*, COUNT(ri.id) as image_count FROM reviews r LEFT JOIN review_images ri ON r.id = ri.review_id GROUP BY r.id`,
     [], (err, rows) => {
       if (err) {
         console.error(err);
@@ -64,6 +40,19 @@ router.get("/", (req, res) => {
           review_html: md.render(r.review),
           images: images.filter(img => img.review_id === r.id)
         }));
+
+        reviews.sort((a, b) => {
+          let cmp = 0;
+          if (sort === 'date') {
+            cmp = new Date(a.created_at) - new Date(b.created_at);
+          } else if (sort === 'stars') {
+            cmp = a.rating - b.rating;
+          } else if (sort === 'images') {
+            cmp = (a.image_count || 0) - (b.image_count || 0);
+          }
+          return cmp * direction;
+        });
+
         res.render("index", { reviews, error: null, reviewCount: reviews.length, req });
       });
     });

@@ -27,9 +27,13 @@
       <form method="get" action="/" style="display:inline-block;">
         <label for="sort">Sort by:</label>
         <select name="sort" id="sort" onchange="this.form.submit()">
-          <option value="date" <%= (!req || !req.query || req.query.sort === 'date' || !req.query.sort) ? 'selected' : '' %>>Newest</option>
+          <option value="date" <%= (!req || !req.query || req.query.sort === 'date' || !req.query.sort) ? 'selected' : '' %>>Creation Date</option>
           <option value="stars" <%= req && req.query && req.query.sort === 'stars' ? 'selected' : '' %>>Stars</option>
-          <option value="images" <%= req && req.query && req.query.sort === 'images' ? 'selected' : '' %>>Most Images</option>
+          <option value="images" <%= req && req.query && req.query.sort === 'images' ? 'selected' : '' %>>Images</option>
+        </select>
+        <select name="direction" id="direction" onchange="this.form.submit()">
+          <option value="desc" <%= (!req || !req.query || req.query.direction === 'desc' || !req.query.direction) ? 'selected' : '' %>>Descending</option>
+          <option value="asc" <%= req && req.query && req.query.direction === 'asc' ? 'selected' : '' %>>Ascending</option>
         </select>
       </form>
     </div>
