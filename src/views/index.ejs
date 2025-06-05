@@ -66,7 +66,7 @@
                   alt="Review Image id:<%= review.id %> - <%= idx + 1 %> of <%= review.images.length %>" 
                   class="carousel-img" 
                   data-index="<%= idx %>" 
-                  style="max-width:200px;max-height:200px;"<% if (idx !== 0) { %> hidden<% } %>
+                  style="max-width:200px;max-height:200px;<% if (idx !== 0) { %>display: none;<% } %>"
                 >
               <% }) %>
               <% if (review.images.length > 1) { %>
