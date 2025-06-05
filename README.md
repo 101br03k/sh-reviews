@@ -1,11 +1,11 @@
-# SH Reviews Website
+# SH-Reviews
 
 A simple and elegant web application that allows users to submit, view, edit, and delete reviews with ratings and image uploads. Built with Node.js, Express, EJS, and SQLite.
 
 ---
 
 ## Features
-
+- **Self-Hostable** clone and run the repository or use the (upcoming) docker image. 
 - **Submit reviews** with title, Markdown-formatted content, star rating (1-5), and optional image upload.
 - **Live Markdown preview** while editing or submitting a review, using the same layout as the main page.
 - **Edit existing reviews** with instant image preview and Markdown support.
