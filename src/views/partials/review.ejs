@@ -20,6 +20,14 @@
         <% if (review.image) { %>
             <img src="<%= review.image %>" alt="Review Image id:<%= review.id %>">
         <% } %>
+        <% if (review.tags && review.tags.length > 0) { %>
+            <div class="review-tags" style="margin-top:0.5em;">
+              <span style="font-weight:bold;">Tags:</span>
+              <% review.tags.forEach(function(tag, i) { %>
+                <span class="tag" style="display:inline-block;background:#eee;border-radius:4px;padding:0.1em 0.5em;margin-right:0.3em;font-size:0.95em;"><%= tag %></span>
+              <% }) %>
+            </div>
+        <% } %>
     </div>
     <div class="rating">Rating: 
         <% for (let i = 0; i < review.rating; i++) { %>

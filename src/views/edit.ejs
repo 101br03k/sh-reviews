@@ -27,6 +27,8 @@
           <option value="4" <%= review.rating == 4 ? 'selected' : '' %>>4 Stars</option>
           <option value="5" <%= review.rating == 5 ? 'selected' : '' %>>5 Stars</option>
         </select><br><br>
+        <label for="tags">Tags (comma separated):</label>
+        <input type="text" id="tags" name="tags" value="<%= review.tags ? review.tags.join(',') : '' %>" placeholder="e.g. food,service,clean"><br><br>
           <% if (review.images && review.images.length > 0) { %>
             <div>
               <strong>Current Images:</strong><br>
