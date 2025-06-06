@@ -57,7 +57,9 @@
             </div>
           <% } %>
           <span class="date"><%= new Date(review.created_at).toLocaleString() %></span>
-          <% if (typeof review.image_count !== 'undefined') { %>
+          <% if (review.image_count == 1) { %>
+            <span class="date" style="margin-left:1em;">Image: 1</span>
+          <% } else if (review.image_count > 1) { %>
             <span class="date" style="margin-left:1em;">Images: <%= review.image_count %></span>
           <% } %>
         </div>
