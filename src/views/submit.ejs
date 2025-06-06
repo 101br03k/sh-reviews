@@ -74,11 +74,14 @@
       }
     }
 
+    // Get tags value
+    const tags = document.querySelector('[name="tags"]').value;
+
     // Fetch preview HTML from server
     const res = await fetch('/preview', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ title, review, rating, images })
+      body: JSON.stringify({ title, review, rating, images, tags })
     });
     previewSection.innerHTML = await res.text();
   };
