@@ -41,7 +41,7 @@ form {
 
 input[type="text"],
 textarea {
-  width: 100%;
+  width: 95%;
   padding: 0.7em;
   margin-bottom: 1em;
   border: 1px solid #ccc;
@@ -258,23 +258,65 @@ footer a {
 }
 
 .review-tags-label {
-  font-weight: bold;
+  padding-right: 0.3em;
 }
 
 .tag {
   display: inline-block;
-  background: #eee;
+  background: #007bff;
   border-radius: 4px;
   padding: 0.1em 0.5em;
   margin-right: 0.3em;
   margin-bottom: 0.6em;
   font-size: 0.95em;
   text-decoration: none;
-  color: #007bff;
+  color: #eee;
   transition: background 0.2s, color 0.2s;
 }
 
 .tag:hover {
-  background: #d0e7ff;
-  color: #0056b3;
+  background: #0056b3;
+  color: #eee;
 }
+
+select,
+.dropdown {
+  padding: 0.4em 1.2em 0.4em 0.7em;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fefefe;
+  font-size: 1em;
+  color: #333;
+  margin-right: 0.5em;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+/* Default: Down arrow */
+select,
+.dropdown {
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'><path d='M4 6l4 4 4-4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.2em center;
+  background-size: 1em;
+}
+
+/* When select is focused (open): Up arrow */
+select:focus,
+.dropdown:focus {
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'><path d='M4 10l4-4 4 4'/></svg>");
+  border-color: #007bff;
+  background-color: #007bff;
+  color: #f7f7f7;
+  outline: none;
+  box-shadow: 0 0 0 2px #cce4ff;
+}
+
+select:hover,
+.dropdown:hover {
+  border-color: #0056b3;
+}
+
