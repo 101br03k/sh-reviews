@@ -37,7 +37,10 @@
         </select>
       </form>
     </div>
-    <% if (req && req.path && req.path.startsWith('/tag/')) { %>
+    <% if (
+      (req && req.path && req.path.startsWith('/tag/')) ||
+      (req && req.query && (req.query.sort || req.query.direction))
+    ) { %>
       <div style="text-align:center; margin-bottom:1.5em;">
         <a href="/" class="button">Home</a>
       </div>
