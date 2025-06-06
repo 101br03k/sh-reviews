@@ -37,6 +37,11 @@
         </select>
       </form>
     </div>
+    <% if (req && req.path && req.path.startsWith('/tag/')) { %>
+      <div style="text-align:center; margin-bottom:1.5em;">
+        <a href="/" class="button">Home</a>
+      </div>
+    <% } %>
     <% reviews.forEach(review => { %>
       <div class="review" <% if (review.rating == 5) { %>id=fivestar-review<% } %>>
         <div class="review-header">
