@@ -1,14 +1,14 @@
 # SH-Reviews
 
-A simple and elegant web application that allows users to submit, view, edit, and delete reviews with ratings and image uploads. Built with Node.js, Express, EJS, and SQLite.
+A simple and elegant web application that allows users to submit, view, edit, and delete reviews with ratings, tags, and image uploads. Built with Node.js, Express, EJS, and SQLite.
 
 ---
 
 ## Features
 - **Self-Hostable** clone and run the repository or use the (upcoming) docker image. 
-- **Submit reviews** with title, Markdown-formatted content, star rating (1-5), and optional image upload.
+- **Submit reviews** with title, Markdown-formatted content, star rating (1-5), tags, and optional image upload.
 - **Live Markdown preview** while editing or submitting a review, using the same layout as the main page.
-- **Edit existing reviews** with instant image preview and Markdown support.
+- **Edit existing reviews** with instant image preview, tag editing, and Markdown support.
 - **Delete reviews** (with automatic image cleanup).
 - **View all reviews** in reverse chronological order (newest first).
 - **Responsive design** with a clean UI.
@@ -17,6 +17,7 @@ A simple and elegant web application that allows users to submit, view, edit, an
 - **SQLite database** for data persistence.
 - **Automatic database and upload folder creation** on first run.
 - **Multiple images per review**: Attach several images to each review. You can add, preview, and remove images when submitting or editing.
+- **Tagging system**: Add tags to reviews, view tags on each review, and click a tag to filter reviews by that tag.
 
 ---
 
@@ -81,9 +82,10 @@ review-website/
    [http://localhost:3000](http://localhost:3000)
 3. **Main actions:**
    - Click **"Add New Review"** to submit a new review.
-   - Use the **Edit** button to modify a review (with live Markdown and image preview).
+   - Use the **Edit** button to modify a review (with live Markdown, tag editing, and image preview).
    - Use the **Delete** button (on the edit page) to remove a review.
    - See the **total number of reviews** at the top of the main page.
+   - **Click a tag** on any review to filter and view all reviews with that tag.
 
 ---
 
@@ -105,6 +107,15 @@ review-website/
 
 ---
 
+## Tagging System
+
+- **Add tags** (comma separated) when submitting or editing a review.
+- **Tags are displayed** under each review.
+- **Click a tag** to view all reviews with that tag.
+- Tag filtering works with all other features (sorting, editing, etc).
+
+---
+
 ## Database Schema
 
 The application uses SQLite with the following table structure:
@@ -116,7 +127,8 @@ CREATE TABLE reviews (
   review TEXT NOT NULL,
   image TEXT,
   rating INTEGER,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  tags TEXT DEFAULT '[]'
 );
 ```
 

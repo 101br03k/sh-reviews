@@ -38,7 +38,8 @@ router.get("/", (req, res) => {
           ...r,
           title_html: md.renderInline(r.title),
           review_html: md.render(r.review),
-          images: images.filter(img => img.review_id === r.id)
+          images: images.filter(img => img.review_id === r.id),
+          tags: r.tags ? JSON.parse(r.tags) : []
         }));
 
         reviews.sort((a, b) => {
@@ -68,9 +69,13 @@ router.post("/submit", upload.array("images", 10), (req, res) => {
   const { title, review, rating } = req.body;
   if (!title || !review || !rating) return res.redirect("/");
 
+  const tags = req.body.tags
+    ? req.body.tags.split(',').map(t => t.trim()).filter(Boolean)
+    : [];
+
   db.run(
-    "INSERT INTO reviews (title, review, rating) VALUES (?, ?, ?)",
-    [title, review, rating],
+    "INSERT INTO reviews (title, review, rating, tags) VALUES (?, ?, ?, ?)",
+    [title, review, rating, JSON.stringify(tags)],
     function (err) {
       if (err) {
         console.error(err);
@@ -99,6 +104,7 @@ router.get("/edit/:id", (req, res) => {
       review.images = images || [];
       review.title_html = md.renderInline(review.title);
       review.review_html = md.render(review.review);
+      review.tags = review.tags ? JSON.parse(review.tags) : [];
       res.render("edit", { review });
     });
   });
@@ -109,9 +115,13 @@ router.post("/update/:id", upload.array("images", 10), (req, res) => {
   const id = req.params.id;
   const { title, review, rating, keepImages = [] } = req.body;
 
+  const tags = req.body.tags
+    ? req.body.tags.split(',').map(t => t.trim()).filter(Boolean)
+    : [];
+
   db.run(
-    "UPDATE reviews SET title = ?, review = ?, rating = ? WHERE id = ?",
-    [title, review, rating, id],
+    "UPDATE reviews SET title = ?, review = ?, rating = ?, tags = ? WHERE id = ?",
+    [title, review, rating, JSON.stringify(tags), id],
     function (err) {
       if (err) {
         console.error(err);
@@ -161,8 +171,7 @@ router.post(
   '/preview',
   express.json({ limit: '5mb' }),
   (req, res) => {
-    const { title, review, rating, images } = req.body;
-    // images: array of base64 strings or URLs
+    const { title, review, rating, images, tags } = req.body;
     res.render('partials/review', {
       review: {
         title,
@@ -170,11 +179,57 @@ router.post(
         rating,
         images: Array.isArray(images) ? images : (images ? [images] : []),
         title_html: md.renderInline(title || ''),
-        review_html: md.render(review || '')
+        review_html: md.render(review || ''),
+        tags: tags && Array.isArray(tags)
+          ? tags
+          : (typeof tags === 'string'
+              ? tags.split(',').map(t => t.trim()).filter(Boolean)
+              : [])
       },
       layout: false
     });
   }
 );
+
+// GET reviews by tag
+router.get("/tag/:tag", (req, res) => {
+  const tag = req.params.tag;
+  const sort = req.query.sort || 'date';
+  const direction = req.query.direction === 'asc' ? 1 : -1;
+
+  db.all(`SELECT r.*, COUNT(ri.id) as image_count FROM reviews r LEFT JOIN review_images ri ON r.id = ri.review_id GROUP BY r.id`,
+    [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.render("index", { reviews: [], error: "Error retrieving reviews", reviewCount: 0 });
+      }
+      db.all("SELECT * FROM review_images", [], (imgErr, images) => {
+        // Only include reviews where tags include the tag
+        const reviews = rows
+          .map(r => ({
+            ...r,
+            title_html: md.renderInline(r.title),
+            review_html: md.render(r.review),
+            images: images.filter(img => img.review_id === r.id),
+            tags: r.tags ? JSON.parse(r.tags) : []
+          }))
+          .filter(r => r.tags && r.tags.includes(tag));
+
+        reviews.sort((a, b) => {
+          let cmp = 0;
+          if (sort === 'date') {
+            cmp = new Date(a.created_at) - new Date(b.created_at);
+          } else if (sort === 'stars') {
+            cmp = a.rating - b.rating;
+          } else if (sort === 'images') {
+            cmp = (a.image_count || 0) - (b.image_count || 0);
+          }
+          return cmp * direction;
+        });
+
+        res.render("index", { reviews, error: null, reviewCount: reviews.length, req });
+      });
+    });
+});
 
 module.exports = router;

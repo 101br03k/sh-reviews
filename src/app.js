@@ -15,7 +15,8 @@ db.run(`
     review TEXT NOT NULL,
     image TEXT,
     rating INTEGER,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    tags TEXT DEFAULT '[]'
   )
 `);
 

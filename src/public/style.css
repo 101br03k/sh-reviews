@@ -252,3 +252,29 @@ footer a {
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
+
+.review-tags {
+  margin-top: 0.5em;
+}
+
+.review-tags-label {
+  font-weight: bold;
+}
+
+.tag {
+  display: inline-block;
+  background: #eee;
+  border-radius: 4px;
+  padding: 0.1em 0.5em;
+  margin-right: 0.3em;
+  margin-bottom: 0.6em;
+  font-size: 0.95em;
+  text-decoration: none;
+  color: #007bff;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tag:hover {
+  background: #d0e7ff;
+  color: #0056b3;
+}

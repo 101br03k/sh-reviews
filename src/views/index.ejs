@@ -10,7 +10,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <img alt="SH-Reviews Logo" class="logo" src="/images/logos/vector/default.svg">
+      <a href="/"><img alt="SH-Reviews Logo" class="logo" src="/images/logos/vector/default.svg"></a>
     </div>
     <% if (error) { %>
       <div style="color: red;"><%= error %></div>
@@ -87,6 +87,14 @@
           <form action="/edit/<%= review.id %>" method="get" style="display:inline;">
             <button class="edit" type="submit" >Edit</button>
           </form>
+          <% if (review.tags && review.tags.length > 0) { %>
+            <div class="review-tags">
+              <span class="review-tags-label">Tags:</span>
+              <% review.tags.forEach(function(tag, i) { %>
+                <a href="/tag/<%= encodeURIComponent(tag) %>" class="tag"><%= tag %></a>
+              <% }) %>
+            </div>
+          <% } %>
         </div>
       </div>
     <% }) %>
