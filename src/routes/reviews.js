@@ -113,7 +113,14 @@ router.get("/edit/:id", (req, res) => {
 // POST updated review
 router.post("/update/:id", upload.array("images", 10), (req, res) => {
   const id = req.params.id;
-  const { title, review, rating, keepImages = [] } = req.body;
+  const { title, review, rating } = req.body;
+  // Normalize keepImages to always be an array
+  let keepImages = req.body.keepImages;
+  if (!keepImages) {
+    keepImages = [];
+  } else if (!Array.isArray(keepImages)) {
+    keepImages = [keepImages];
+  }
 
   const tags = req.body.tags
     ? req.body.tags.split(',').map(t => t.trim()).filter(Boolean)
@@ -129,7 +136,7 @@ router.post("/update/:id", upload.array("images", 10), (req, res) => {
       }
       db.all("SELECT * FROM review_images WHERE review_id = ?", [id], (err, rows) => {
         rows.forEach(img => {
-          if (!Array.isArray(keepImages) || !keepImages.includes(img.image)) {
+          if (!keepImages.includes(img.image)) {
             const imgPath = path.join(__dirname, "..", "public", img.image);
             fs.unlink(imgPath, () => {});
             db.run("DELETE FROM review_images WHERE id = ?", [img.id]);
