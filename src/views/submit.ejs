@@ -20,7 +20,7 @@
     <h1>Submit a Review</h1>
     <form action="/submit" method="POST" enctype="multipart/form-data">
       <input type="text" name="title" placeholder="Product / Item Name" required>
-      <textarea name="review" placeholder="Your Review" required></textarea>
+      <textarea name="review" placeholder="Your Review" required></textarea><br>
       <input type="file" name="images" accept="image/*" multiple>
       <select name="rating" required>
         <option value="">Select Rating</option>
@@ -30,7 +30,7 @@
         <option value="4">4 Stars</option>
         <option value="5">5 Stars</option>
       </select><br><br>
-      <label for="tags">Tags (comma separated):</label>
+      <label for="tags">Tags (comma separated):</label><br>
       <textarea id="tags" name="tags" placeholder="e.g. food,service,clean"></textarea><br><br>
       <a href="/" class="button" style="float: left;">Cancel & Back to Reviews</a>
     <button type="submit" style="float: right; margin-left: 5px;">Submit Review</button>
